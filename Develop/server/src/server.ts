@@ -1,5 +1,7 @@
-import dotenv from 'dotenv';
-import express from 'express';
+//Nancy note: 'dotenv' is software lib/module that allows devs to load environment variables from file named ".env"
+import dotenv from 'dotenv'; 
+//Nancy note: ''express' module is a web framework for Node.js and used to build web apps and APIs//
+import express from 'express'; 
 dotenv.config();
 
 // Import the routes
