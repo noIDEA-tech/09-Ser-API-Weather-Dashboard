@@ -96,7 +96,8 @@ class Weather {
   }
 // TODO: Complete buildForecastArray method
 // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
-  private buildForecastArray(currentWeather: Weather, weatherData: any[]): Weather[] {
+  private buildForecastArray(currentWeather: Weather, weatherData: any[]) {
+    console.log(currentWeather)
     return weatherData.map((data: any) => new Weather(
       data.name,
       data.main.temp,

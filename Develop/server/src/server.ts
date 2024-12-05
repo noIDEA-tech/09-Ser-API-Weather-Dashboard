@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(routes);
  
 // TODO: Implement middleware to connect the routes
-
+app.use('/api', routes);
 
 // Start the server on the port
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
