@@ -5,6 +5,38 @@
 ## Description
 This Project consists of a Weather Dashboard Application designed to allow users to call the OpenWeather API and render data in the browswer.
 
+## User Story
+
+```md
+AS A traveler
+
+I WANT to see the weather outlook for multiple cities
+
+SO THAT I can plan a trip accordingly
+```
+
+## Acceptance Criteria
+
+```md
+GIVEN a weather dashboard with form inputs
+
+WHEN I search for a city
+
+THEN I am presented with current and future conditions for that city, and that city is added to the search history
+
+WHEN I view current weather conditions for that city
+
+THEN I am presented with the city name, the date, an icon representation of weather conditions, a description of the weather for the icon's alt tag, the temperature, the humidity, and the wind speed
+
+WHEN I view future weather conditions for that city
+
+THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
+
+WHEN I click on a city in the search history
+
+THEN I am again presented with current and future conditions for that city
+```
+
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
@@ -16,7 +48,7 @@ This Project consists of a Weather Dashboard Application designed to allow users
 
 ## Installation
 ```md
-Installation requirements: npm i, npm install express, Node.js, Typescript.js, 
+Installation requirements: Node.js, TypeScript; run: npm i, npm install express, npm build, npm run dev, and npm i json-server
 ```
 
 ## Usage
@@ -26,7 +58,7 @@ To use this application, create an API Key and run npm start
 
 ## Credits
 ```md
-Nancy Watreas Feltman
+Nancy Watreas, GitHub co-pilot
 ```
 
 ## License
