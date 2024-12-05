@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "id": 1,
+        "city": "New York",
+        "temperature": 22,
+        "conditions": "Sunny"
+    },
+    {
+        "id": 2,
+        "city": "Los Angeles",
+        "temperature": 28,
+        "conditions": "Cloudy"
+    }
+]
