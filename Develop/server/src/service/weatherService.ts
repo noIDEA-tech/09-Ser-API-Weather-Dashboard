@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
+import fetch from 'node-fetch';
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
@@ -55,16 +56,18 @@ class Weather {
 
   // TODO: Define the baseURL, API key, and city name properties
   constructor() {
-    this.baseURL = process.env.API_BASE_URL || '';
+    this.baseURL = 'https://api.openweathermap.org/data/2.5';
     this.apiKey = process.env.OPENWEATHER_API_KEY || '';
     this.cityName = '';
   }
   // TODO: Create fetchLocationData method
   // private async fetchLocationData(query: string) {}
   private async fetchLocationData(query: string): Promise<any> {
-    const response = await fetch(`${this.baseURL}/weather?q=${query}&appid=${this.apiKey}`);
-    return response.json();
-  }
+      const geocodeQuery = this.buildGeocodeQuery(query);
+      const response = await fetch(geocodeQuery);
+      return response.json();
+    }
+  
   // TODO: Create destructureLocationData method
   // private destructureLocationData(locationData: Coordinates): Coordinates {}
   private destructureLocationData(locationData: any): Coordinates {
@@ -95,22 +98,6 @@ class Weather {
     const response = await fetch(this.buildWeatherQuery(coordinates));
     return response.json();
   }
-  //**THIS BLOCK OF CODE ADDED FROM AI CO-PILOT EXAMPLE OF HOW TO USE buildGeocodeQuery**//
-  public async getCoordinates(cityName: string): Promise<Coordinates> {
-    const query = this.buildGeocodeQuery(cityName);
-    const response = await fetch(query);
-    const data = await response.json();
-    if (data.length > 0) {
-      return {
-        latitude: data[0].lat,
-        longitude: data[0].lon,
-      };
-    } else {
-      throw new Error('City not found');
-    }
-  }
-  //**END OF ADDED CODE FROM AI CO-PILOT**//
-
   // TODO: Build parseCurrentWeather method
   // private parseCurrentWeather(response: any) {}
   private parseCurrentWeather(response: any): Weather {
@@ -177,4 +164,18 @@ export default new WeatherService();
 //     return this.buildForecastArray(currentWeather, weatherData.list);
 //   }  
 // }
-
+//**THIS BLOCK OF CODE ADDED FROM AI CO-PILOT EXAMPLE OF HOW TO USE buildGeocodeQuery**//
+  // public async getCoordinates(cityName: string): Promise<Coordinates> {
+  //   const query = this.buildGeocodeQuery(cityName);
+  //   const response = await fetch(query);
+  //   const data = await response.json();
+  //   if (data.length > 0) {
+  //     return {
+  //       latitude: data[0].lat,
+  //       longitude: data[0].lon,
+  //     };
+  //   } else {
+  //     throw new Error('City not found');
+  //   }
+  // }
+  //**END OF ADDED CODE FROM AI CO-PILOT**//

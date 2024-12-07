@@ -5,7 +5,15 @@ import express from 'express';
 dotenv.config();
 
 // Import the routes
+import { Router } from 'express';
+const router = Router();
+
 import routes from './routes/index.js';
+import weatherRoutes from './routes/api/weatherRoutes.js';
+
+router.use('/weather', weatherRoutes);
+
+export default router;
 
 const app = express();
 
