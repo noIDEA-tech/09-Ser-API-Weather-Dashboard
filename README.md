@@ -53,7 +53,7 @@ Installation requirements: Node.js, TypeScript; run: npm i, npm install express,
 
 ## Usage
 ```md
-To use this application, create an API Key and run npm start
+To use this application, create/apply your API Key and run: npm run start:dev
 ```
 
 ## Credits
@@ -71,7 +71,7 @@ Features include current weather conditions for a given city displayed as city n
 
 ## Tests
 ```md
-Running npm start in Integrated Terminal
+Running npm run start:dev in Integrated Terminal to launch Weather Dashboard Application
 ```
 
 ## Contact
