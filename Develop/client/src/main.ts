@@ -52,7 +52,7 @@ const fetchWeather = async (cityName: string) => {
 };
 
 const fetchSearchHistory = async () => {
-  const history = await fetch('/api/weather/history', {
+  const history = await fetch('/api/weather/', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -252,9 +252,9 @@ Event Handlers
 const handleSearchFormSubmit = (event: any): void => {
   event.preventDefault();
 
-  if (!searchInput.value) {
-    throw new Error('City cannot be blank');
-  }
+  // if (!searchInput.value) {
+  //   throw new Error('City cannot be blank');
+  // }
 
   const search: string = searchInput.value.trim();
   fetchWeather(search).then(() => {
