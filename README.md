@@ -48,12 +48,12 @@ THEN I am again presented with current and future conditions for that city
 
 ## Installation
 ```md
-Installation requirements: Node.js, TypeScript; run: npm i, npm install express, npm build, npm run dev, and npm i json-server
+Installation requirements: Node.js, TypeScript, npm inquirer; run: npm i, npm install, npm install express, npm run build, npm run dev
 ```
 
 ## Usage
 ```md
-To use this application, create/apply your API Key and run: npm run start:dev
+To use this application, users will need to suppy an API key and then run: 'npm run start:dev' in the Integrated Terminal from the root file
 ```
 
 ## Credits
@@ -71,7 +71,7 @@ Features include current weather conditions for a given city displayed as city n
 
 ## Tests
 ```md
-Running npm run start:dev in Integrated Terminal to launch Weather Dashboard Application
+Running npm run start:dev in Integrated Terminal to launch Weather Dashboard Application. Issues during testing include not being able to access Open Weather website making this application non-functional. I am in the process of identifying and fixing errors ("bugs") in the code that are causing the app to malfunction.
 ```
 
 ## Contact

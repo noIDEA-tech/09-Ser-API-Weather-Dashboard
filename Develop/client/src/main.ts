@@ -35,7 +35,7 @@ API Calls
 */
 
 const fetchWeather = async (cityName: string) => {
-  const response = await fetch('/api/weather/', {
+  const response = await fetch('https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=YOUR_API_KEY`)', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
