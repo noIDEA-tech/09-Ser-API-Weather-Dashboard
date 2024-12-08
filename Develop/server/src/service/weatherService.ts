@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
@@ -17,7 +17,8 @@ class Weather {
   windSpeed: number;
   humidity: number;
 
-  constructor(
+  
+  constructor (
     city: string,
     date: string,
     icon: string,
@@ -50,19 +51,19 @@ class Weather {
 // }  
   // TODO: Complete the WeatherService class
   class WeatherService {
-    private baseURL: string;
-    private apiKey: string;
-    private cityName: string;
+    baseURL?: string;
+    apiKey?: string;
+    cityName: string;
 
   // TODO: Define the baseURL, API key, and city name properties
   constructor() {
-    this.baseURL = 'https://api.openweathermap.org/data/2.5';
+    this.baseURL = process.env.API_BASE_URL || '';
     this.apiKey = process.env.OPENWEATHER_API_KEY || '';
     this.cityName = '';
   }
   // TODO: Create fetchLocationData method
   // private async fetchLocationData(query: string) {}
-  private async fetchLocationData(query: string): Promise<any> {
+ async fetchLocationData(query: string): Promise<any> {
       const geocodeQuery = this.buildGeocodeQuery(query);
       const response = await fetch(geocodeQuery);
       return response.json();
@@ -84,7 +85,7 @@ class Weather {
   // TODO: Create buildWeatherQuery method
   // private buildWeatherQuery(coordinates: Coordinates): string {}
   private buildWeatherQuery(coordinates: Coordinates): string {
-    return `${this.baseURL}/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}`;
+    return `${this.baseURL}https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}`;
   }
   // TODO: Create fetchAndDestructureLocationData method
   // private async fetchAndDestructureLocationData() {}
