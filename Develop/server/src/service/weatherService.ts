@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-// import fetch from 'node-fetch';
+import fetch from 'node-fetch';
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
@@ -56,6 +56,7 @@ class Weather {
     cityName: string;
 
   // TODO: Define the baseURL, API key, and city name properties
+ 
   constructor() {
     this.baseURL = process.env.API_BASE_URL || '';
     this.apiKey = process.env.OPENWEATHER_API_KEY || '';
@@ -146,6 +147,7 @@ class Weather {
   // }
    // TODO: Complete getWeatherForCity method
   // async getWeatherForCity(city: string) {}
+  
   public async getWeatherForCity(city: string): Promise<Weather[]> {
     this.cityName = city;
     const coordinates = await this.fetchAndDestructureLocationData();
