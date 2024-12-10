@@ -8,9 +8,9 @@ const router = Router();
 // router.post('/', (req: Request, res: Response) => {
 // TODO: GET weather data from city name
 // TODO: save city to search history
-router.get('/:city', async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
-    const cityName = req.params.city;
+    const cityName = req.body.city;
     const weatherData = await WeatherService.getWeatherForCity(cityName);
 
     if (typeof weatherData=== 'string') {
@@ -32,6 +32,7 @@ router.get('/history', async (_: Request, res: Response) => {
     const history = await HistoryService.getCities();
     res.status(200).json(history);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: 'An error occurred while retrieving search history' });
   }
 });

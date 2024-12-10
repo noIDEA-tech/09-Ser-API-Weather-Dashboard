@@ -20,7 +20,7 @@ class HistoryService {
   
 // TODO: Define a read method that reads from the searchHistory.json file
   async read() {
-    return await fs.readFile('../../db/searchHistory.json', {
+    return await fs.readFile('db/searchHistory.json', {
       flag: 'a+',
       encoding: 'utf8',
     });
