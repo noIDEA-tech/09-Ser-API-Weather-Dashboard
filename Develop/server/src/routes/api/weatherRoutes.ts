@@ -9,23 +9,20 @@ const router = Router();
 // TODO: GET weather data from city name
 // TODO: save city to search history
 router.post('/', async (req: Request, res: Response) => {
+  const cityName = req.body.cityName;
+  if (!cityName) {
+    return res.status(400).json({ error: 'City name is required' });
+  }
+  
   try {
-    const cityName = req.body.city;
     const weatherData = await WeatherService.getWeatherForCity(cityName);
-
-    if (typeof weatherData=== 'string') {
-      res.status(404).json({ message: 'No cities found' });
-    } else {
-      // Ensures saved data has proper casing regardless of input
-      await WeatherService.getWeatherForCity(cityName);
-      await HistoryService.addCity(cityName);
-      res.json(weatherData);
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
+    await HistoryService.addCity(cityName);
+    return res.json(weatherData);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to retrieve weather data' });
   }
 });
+  
 // TODO: GET search history
 router.get('/history', async (_: Request, res: Response) => {
   try {
@@ -36,7 +33,7 @@ router.get('/history', async (_: Request, res: Response) => {
     res.status(500).json({ error: 'An error occurred while retrieving search history' });
   }
 });
-
+// * BONUS TODO: DELETE city from search history
 export default router;
 // const weatherServiceInstance = WeatherService;
 
