@@ -5,29 +5,35 @@ import express from 'express';
 dotenv.config();
 
 // Import the routes
-import { Router } from 'express';
-const router = Router();
+// import { Router } from 'express';
+// const router = Router();
 
 import routes from './routes/index.js';
-import weatherRoutes from './routes/api/weatherRoutes.js';
+// import weatherRoutes from './routes/api/weatherRoutes.js';
 
-router.use('/weather', weatherRoutes);
+// router.use('/weather', weatherRoutes);
 
-export default router;
+// export default router;
 
 const app = express();
 
 const PORT = process.env.PORT || 3001;
 
 // NANCY-VERIFY PATH TO DIST!! TODO: Serve static files of entire client dist folder
-app.use(express.static('../client/dist'));
+app.use(express.static(path.join(__dirname, '../client/dist')));
+// app.use(express.static('../client/dist'));
 // TODO: Implement middleware for parsing JSON and urlencoded form data
-app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
-app.use(routes);
+app.use(express.urlencoded({ extended: true}));
+
+// app.use(routes);
  
 // TODO: Implement middleware to connect the routes
 app.use('/api', routes);
-
+// Serve the index.html for any other routes (client-side routing)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
 // Start the server on the port
+
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
