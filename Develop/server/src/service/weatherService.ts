@@ -4,11 +4,13 @@ import fetch from 'node-fetch';
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lon: number;
 }
 // TODO: Define a class for the Weather object
-class Weather {
+interface Weather {
+  id?: string;
+  name: string;
   city: string;
   date: string;
   icon: string;
@@ -16,26 +18,40 @@ class Weather {
   tempF: number;
   windSpeed: number;
   humidity: number;
-
-  
-  constructor (
-    city: string,
-    date: string,
-    icon: string,
-    iconDescription: string,
-    tempF: number,
-    windSpeed: number,
-    humidity: number
-  ) {
-    this.city = city;
-    this.date = date;
-    this.icon = icon;
-    this.iconDescription = iconDescription;
-    this.tempF = tempF;
-    this.windSpeed = windSpeed;
-    this.humidity = humidity;
-  }
 }
+
+class WeatherService {
+  // Properties
+  private baseURL: string = 'https://api.openweathermap.org/data/2.5';
+  private apiKey: string;
+  private cityName: string = '';
+
+  constructor() {
+    // Safely retrieve API key from environment variables
+    this.apiKey = process.env.OPENWEATHER_API_KEY || '';
+    if (!this.apiKey) {
+      throw new Error('OpenWeather API key is missing');
+    }
+  }
+  
+  // constructor (
+  //   city: string,
+  //   date: string,
+  //   icon: string,
+  //   iconDescription: string,
+  //   tempF: number,
+  //   windSpeed: number,
+  //   humidity: number
+  // ) {
+  //   this.city = city;
+  //   this.date = date;
+  //   this.icon = icon;
+  //   this.iconDescription = iconDescription;
+  //   this.tempF = tempF;
+  //   this.windSpeed = windSpeed;
+  //   this.humidity = humidity;
+//   // }
+// }
 // class Weather {
 //   cityName: string;
 //   temperature: number;
@@ -50,32 +66,44 @@ class Weather {
 //   }
 // }  
   // TODO: Complete the WeatherService class
-  class WeatherService {
-    baseURL?: string;
-    apiKey?: string;
-    cityName: string;
+  // class WeatherService {
+  //   baseURL?: string;
+  //   apiKey?: string;
+  //   cityName: string;
 
-  // TODO: Define the baseURL, API key, and city name properties
+  // // TODO: Define the baseURL, API key, and city name properties
  
-  constructor() {
-    this.baseURL = process.env.API_BASE_URL || '';
-    this.apiKey = process.env.OPENWEATHER_API_KEY || '';
-    this.cityName = '';
-  }
+  // constructor() {
+  //   this.baseURL = process.env.API_BASE_URL || '';
+  //   this.apiKey = process.env.OPENWEATHER_API_KEY || '';
+  //   this.cityName = '';
+  // }
   // TODO: Create fetchLocationData method
   // private async fetchLocationData(query: string) {}
- async fetchLocationData(query: string): Promise<any> {
-      const geocodeQuery = this.buildGeocodeQuery(query);
-      const response = await fetch(geocodeQuery);
-      return response.json();
+  private async fetchLocationData(query: string): Promise<Coordinates> {
+    const geocodeUrl = `${this.baseURL}/geo/1.0/direct`;
+    
+    try {
+      const response = await axios.get(geocodeUrl, {
+        params: {
+          q: query,
+          limit: 1,
+          appid: this.apiKey
+        }
+      });
+
+      return this.destructureLocationData(response.data[0]);
+    } catch (error) {
+      console.error('Error fetching location data:', error);
+      throw new Error('Unable to find coordinates for the specified city');
     }
-  
-  // TODO: Create destructureLocationData method
-  // private destructureLocationData(locationData: Coordinates): Coordinates {}
+  }
+
+  // Extract coordinates from location data
   private destructureLocationData(locationData: any): Coordinates {
     return {
-      latitude: locationData.coord.lat,
-      longitude: locationData.coord.lon,
+      lat: locationData.lat,
+      lon: locationData.lon
     };
   }
   // TODO: Create buildGeocodeQuery method
@@ -86,7 +114,7 @@ class Weather {
   // TODO: Create buildWeatherQuery method
   // private buildWeatherQuery(coordinates: Coordinates): string {}
   private buildWeatherQuery(coordinates: Coordinates): string {
-    return `${this.baseURL}https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}`;
+    return `${this.baseURL}https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}`;
   }
   // TODO: Create fetchAndDestructureLocationData method
   // private async fetchAndDestructureLocationData() {}
