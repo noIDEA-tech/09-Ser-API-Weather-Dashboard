@@ -52,6 +52,24 @@ interface Weather {
     }
 }
 
+async getWeatherForCity(city: string): Promise<Weather[]> {
+  try {
+    this.cityName = city;
+    
+    const coordinates = await this.fetchLocationData(city);
+    const weatherData = await this.fetchWeatherData(coordinates);
+    
+    const currentWeather = this.parseCurrentWeather(weatherData);
+    const forecastWeather = this.buildForecastArray(currentWeather, weatherData);
+    
+      return [currentWeather, ...forecastWeather];
+  } catch (error) {
+      console.error('Error in getWeatherForCity:', error);
+     throw error;
+    }
+  }
+
+
 private async fetchLocationData(query: string): Promise<Coordinates> {
   try {
     const url = this.buildGeocodeQuery(query);
@@ -138,24 +156,7 @@ private buildForecastArray(currentWeather: Weather, weatherData: any): Weather[]
     tempF: Math.round(day.temp.day),
     windSpeed: Math.round(day.wind_speed),
     humidity: day.humidity
-  }));
-}
-
-async getWeatherForCity(city: string): Promise<Weather[]> {
-  try {
-    this.cityName = city;
-    
-    const coordinates = await this.fetchLocationData(city);
-    const weatherData = await this.fetchWeatherData(coordinates);
-    
-    const currentWeather = this.parseCurrentWeather(weatherData);
-    const forecastWeather = this.buildForecastArray(currentWeather, weatherData);
-    
-      return [currentWeather, ...forecastWeather];
-  } catch (error) {
-      console.error('Error in getWeatherForCity:', error);
-     throw error;
-    }
+    }));
   }
 }
 

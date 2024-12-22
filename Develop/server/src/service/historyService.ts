@@ -1,10 +1,3 @@
-
-// import fs from 'node:fs/promises';
-// import { v4 as uuidv4 } from 'uuid';
-// import path from 'node:path';
- 
-// import * as path from 'node:path';
- 
 // TODO: Define a City class with name and id properties
 class City {
   id: string;
@@ -13,20 +6,15 @@ class City {
   constructor(name: string) {
     this.id = Math.random().toString(36).substring(2, 15);
     this.name = name;
-    }
+  }
 }
-  // constructor(name: string) {
-  //   this.id = uuidv4();
-  //   this.name = name;
-  // }
-// interface searchHistory {
-//   id: string;
-//   name: string;
-//   timestamp: Date;
-// }
 // TODO: Complete the HistoryService class
 class HistoryService {
-  private filePath: string = './db/searchHistory.json';
+  private filePath: string;
+
+  constructor() {
+    this.filePath = './db/searchHistory.json';
+  }
 
 // TODO: Define a read method that reads from the searchHistory.json file
 // async read() {
@@ -48,11 +36,11 @@ class HistoryService {
         this.filePath,
         JSON.stringify(cities, null, 2),
         'utf8'
-      );
-    } catch (error) {
+    );
+  } catch (error) {
       throw new Error('Failed to write to history file');
-    }
   }
+}
 // TODO: Define a getCities method that reads the cities from the searchHistory.json file and returns them as an array of City objects
 // async getCities() {}
 async getCities(): Promise<City[]> {
@@ -83,17 +71,21 @@ async addCity(cityName: string): Promise<City> {
   }
 }
 
+// * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
+// async removeCity(id: string) {}
 async removeCity(id: string): Promise<void> {
   try {
-    let cities = await this.read();
-    cities = cities.filter(city => city.id !== id);
-    await this.write(cities);
-  } catch (error) {
-    throw new Error('Failed to remove city from history');
+      let cities = await this.read();
+      cities = cities.filter(city => city.id !== id);
+      await this.write(cities);
+    } catch (error) {
+      throw new Error('Failed to remove city from history');
+    }
   }
 }
-}
+
 export default new HistoryService();
+
 // TODO: Define a read method that reads from the searchHistory.json file
   // async read() {
   //   return await fs.readFile('db/searchHistory.json', {
@@ -138,16 +130,7 @@ export default new HistoryService();
   //   await this.write(cities);
   // }
 
-// * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
-// async removeCity(id: string) {}
-
-//   async removeCity(id: string) {
-//     const cities = await this.getCities();
-//     const filteredCities = cities.filter((city) => city.id !== id);
-//     await this.write(filteredCities);
-//   }
-// }
-
+ 
 
 
   
