@@ -1,44 +1,77 @@
 import { Router, type Request, type Response } from 'express';
-const router = Router();
-
-import WeatherService from '../../service/weatherService.js';
+import axios from 'axios';
+// import WeatherService from '../../service/weatherService.js';
 import HistoryService from '../../service/historyService.js';
- 
+
+const router = Router();
+const OPENWEATHER_API_KEY = process.env.OPENWEATHER_API_KEY;
+
 // TODO: POST Request with city name to retrieve weather data
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { cityName } = req.body;
-    const weatherData = await WeatherService.getWeatherForCity(cityName);
-    res.json(weatherData);
-  } catch (error) {
-    console.error('Error in weather route:', error);
-    res.status(500).json({ message: 'Unable to fetch weather data' });
-  }
+      const { cityName } = req.body;
+      if (!cityName) {
+          return res.status(400).json({ error: 'City name is required'})
+      }
+
+      const geoResponse = await axios.get(
+        `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${OPENWEATHER_API_KEY}`  
+      );
+
+      if (!geoResponse.data[0]) {
+          return res.status(400).json({ error: 'City is not found' });
+      }
+
+      const { lat, lon } = geoResponse.data[0];
+
+      const weatherResponse = await axios.get(
+          `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=imperial` 
+      );
+
+      await HistoryService.addCity(cityName);
+
+      const formattedData = weatherResponse.data.list
+      .filter((_: any, index: number) => index % 8 === 0) // Get one reading per day
+      .map((item: any) => ({
+        city: cityName,
+        date: new Date(item.dt * 1000).toLocaleDateString(),
+        icon: item.weather[0].icon,
+        iconDescription: item.weather[0].description,
+        tempF: Math.round(item.main.temp),
+        windSpeed: Math.round(item.wind.speed),
+        humidity: item.main.humidity
+      }));
+
+      res.json(formattedData);
+    } catch (error) {
+      console.error('Error', error);
+      res.status(500).json({ error: 'Failed to fetch weather data' });
+    }
 });
 
 // TODO: GET search history
-router.get('/history', async (_req: Request, res: Response) => {
-  try {
-    const history = await HistoryService.getCities();
-    res.json(history);
-  } catch (error) {
-    console.error('Error fetching history:', error);
-    res.status(500).json({ message: 'Unable to fetch weather history' });
-  }
+  router.get('/history', async (req: Request, res: Response) => {
+    try {
+      const history = await HistoryService.getAllCities();
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch search history' });
+    }
 });
 
 // * BONUS TODO: DELETE city from search history
-router.delete('/weather/history/:id', async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    await HistoryService.removeCity(id);
-    res.sendStatus(204);
-  } catch (error) {
-    console.error('Error deleting from history:', error);
-    res.status(500).json({ message: 'Unable to delete from history' });
-  }
-});
+  router.delete('/history/:id', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      await HistoryService.deleteCity(id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete city' });
+    }
+  });
 
+
+ 
 export default router;
 
 // router.post('/', async (req: Request, res: Response) => {

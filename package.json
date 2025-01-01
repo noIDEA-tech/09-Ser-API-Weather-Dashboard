@@ -1,0 +1,23 @@
+{
+  "name": "09-ser-api-weather-dashboard",
+  "version": "1.0.0",
+  "description": "![MIT](https://img.shields.io/badge/License-MIT-blue)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noIDEA-tech/09-Ser-API-Weather-Dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/noIDEA-tech/09-Ser-API-Weather-Dashboard/issues"
+  },
+  "homepage": "https://github.com/noIDEA-tech/09-Ser-API-Weather-Dashboard#readme",
+  "devDependencies": {
+    "@types/node": "^22.10.3"
+  }
+}
