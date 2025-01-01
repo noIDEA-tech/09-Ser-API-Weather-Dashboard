@@ -19,5 +19,13 @@
   "homepage": "https://github.com/noIDEA-tech/09-Ser-API-Weather-Dashboard#readme",
   "devDependencies": {
     "@types/node": "^22.10.3"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "inquirer": "^12.3.0",
+    "json-server": "^1.0.0-beta.3",
+    "uuid": "^11.0.3"
   }
 }

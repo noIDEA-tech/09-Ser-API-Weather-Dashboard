@@ -1,8 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
-// Import the routes
 import routes from './routes/index.js';
-
 import path from 'path';
 
 dotenv.config();
@@ -26,7 +24,7 @@ app.use(routes);
 // Start the server on the port
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
 
-
+// Import the routes
 //Nancy note: 'dotenv' is software lib/module that allows devs to load environment variables from file named ".env"
 //Nancy note: ''express' module is a web framework for Node.js and used to build web apps and APIs//
 
