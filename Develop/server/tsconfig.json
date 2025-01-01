@@ -2,11 +2,16 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     /* Modules */
+    "module": "CommonJS",
+    "moduleResolution": "node", // Add this
+    "esModuleInterop": true,   // Add this
     "rootDir": "src" /* Specify the root folder within your source files. */,
 
     /* Emit */
-    "outDir": "dist" /* Specify an output folder for all emitted files. */
+    "outDir": "dist", /* Specify an output folder for all emitted files. */
+    "skipLibCheck": true
     // "noEmitOnError": true /* Disable emitting files if any type checking errors are reported. */
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
