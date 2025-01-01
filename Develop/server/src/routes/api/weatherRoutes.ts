@@ -1,47 +1,42 @@
-import { Router } from 'express';
-
-// import { Router, type Request, type Response } from 'express';
-import weatherService from '../../service/weatherService.js';
-import historyService from '../../service/historyService.js';
-
+import { Router, type Request, type Response } from 'express';
 const router = Router();
-// const router = Router();
 
+import WeatherService from '../../service/weatherService.js';
+import HistoryService from '../../service/historyService.js';
+ 
 // TODO: POST Request with city name to retrieve weather data
-// router.post('/', (req: Request, res: Response) => {
-// TODO: GET weather data from city name
-// TODO: save city to search history
-router.post('/weather', async (req, res) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
     const { cityName } = req.body;
-    const weatherData = await weatherService.getWeatherForCity(cityName);
-    await historyService.addToHistory(cityName); // Save to history
+    const weatherData = await WeatherService.getWeatherForCity(cityName);
     res.json(weatherData);
   } catch (error) {
-    console.error('Error fetching weather:', error);
-    res.status(500).json({ error: 'Failed to fetch weather data' });
+    console.error('Error in weather route:', error);
+    res.status(500).json({ message: 'Unable to fetch weather data' });
   }
 });
 
-router.get('/weather/history', async (req, res) => {
+// TODO: GET search history
+router.get('/history', async (_req: Request, res: Response) => {
   try {
-    const history = await historyService.getHistory();
+    const history = await HistoryService.getCities();
     res.json(history);
   } catch (error) {
     console.error('Error fetching history:', error);
-    res.status(500).json({ error: 'Failed to fetch history' });
+    res.status(500).json({ message: 'Unable to fetch weather history' });
   }
 });
-// // * BONUS TODO: DELETE city from search history
-router.delete('/weather/history/:id', async (req, res) => {
+
+// * BONUS TODO: DELETE city from search history
+router.delete('/weather/history/:id', async (req: Request, res: Response) => {
   try {
-    await historyService.deleteFromHistory(req.params.id);
+    const { id } = req.params;
+    await HistoryService.removeCity(id);
     res.sendStatus(204);
   } catch (error) {
     console.error('Error deleting from history:', error);
-    res.status(500).json({ error: 'Failed to delete from history'});
-    }
-    
+    res.status(500).json({ message: 'Unable to delete from history' });
+  }
 });
 
 export default router;
@@ -94,6 +89,5 @@ export default router;
 //   }
 // });
 
-// * BONUS TODO: DELETE city from search history
-
+ 
 

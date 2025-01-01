@@ -51,49 +51,83 @@ interface Weather {
       throw new Error('OpenWeather API key is missing');
     }
 }
-
-async getWeatherForCity(city: string): Promise<Weather[]> {
-  try {
-    this.cityName = city;
+// TODO: Create fetchLocationData method
+// private async fetchLocationData(query: string) {}
+// private async fetchLocationData(query: string): Promise<Coordinates> {
+//   const geocodeUrl = `${this.baseURL}/geo/1.0/direct`;
+  
+//   try {
+//     const response = await fetch(`${geocodeUrl}?q=${query}&limit=1&appid=${this.apiKey}`);
     
-    const coordinates = await this.fetchLocationData(city);
-    const weatherData = await this.fetchWeatherData(coordinates);
+//     if (!response.ok) {
+//       throw new Error('Failed to fetch location data');
+//     }
     
-    const currentWeather = this.parseCurrentWeather(weatherData);
-    const forecastWeather = this.buildForecastArray(currentWeather, weatherData);
-    
-      return [currentWeather, ...forecastWeather];
-  } catch (error) {
-      console.error('Error in getWeatherForCity:', error);
-     throw error;
-    }
+//     const data = await response.json();
+//     return this.destructureLocationData(data[0]);
+//   } catch (error) {
+//     console.error('Error fetching location data:', error);
+//     throw new Error('Unable to find coordinates for the specified city');
+//   }
+// }
+// TODO: Create destructureLocationData method
+// private destructureLocationData(locationData: Coordinates): Coordinates {}
+// private destructureLocationData(locationData: Coordinates): Coordinates {
+//     return {
+//       lat: locationData.lat,
+//       lon: locationData.lon
+//     };
+//   }
+ // TODO: Create buildGeocodeQuery method
+  // private buildGeocodeQuery(): string {}
+  private buildGeocodeQuery(city: string): string {
+    const params = new URLSearchParams({
+      q: city,
+      limit: '1',
+      appid: this.apiKey
+    });
+    return `${this.baseURL}/geo/1.0/direct?${params}`;
   }
+ // TODO: Create buildWeatherQuery method
+// private buildWeatherQuery(coordinates: Coordinates): string {}
+  private buildWeatherQuery(coordinates: Coordinates): string {
+    const params = new URLSearchParams({
+      lat: coordinates.lat.toString(),
+      lon: coordinates.lon.toString(),
+      units: 'imperial',
+      appid: this.apiKey
+    });
 
-
-private async fetchLocationData(query: string): Promise<Coordinates> {
+    return `${this.baseURL}/onecall?${params}`;
+  }
+// TODO: Create fetchAndDestructureLocationData method
+private async fetchAndDestructureLocationData(city: string): Promise<Coordinates> {
   try {
-    const url = this.buildGeocodeQuery(query);
+    const url = this.buildGeocodeQuery(city);
     const response = await fetch(url);
-    
+
     if (!response.ok) {
       throw new Error('Failed to fetch location data');
     }
-    
     const data = await response.json();
-    return this.destructureLocationData(data[0]);
+
+    if (!data || data.length === 0) {
+      throw new Error(`No location found for city: ${city}`);
+    }
+    //Destructure the lat and lon from the response
+    const { lat, lon } = data[0];
+
+    return {
+      lat: lat,
+      lon: lon
+    };
   } catch (error) {
-    console.error('Error fetching location data:', error);
+    console.error('Error in fetchAndDestructureLocationData', error);
     throw new Error('Unable to find coordinates for the specified city');
   }
 }
-
-private destructureLocationData(locationData: any): Coordinates {
-    return {
-      lat: locationData.lat,
-      lon: locationData.lon
-    };
-  }
-
+// TODO: Create fetchWeatherData method
+// private async fetchWeatherData(coordinates: Coordinates) {} 
 private async fetchWeatherData(coordinates: Coordinates) {
   try {
     const url = this.buildWeatherQuery(coordinates);
@@ -109,28 +143,6 @@ private async fetchWeatherData(coordinates: Coordinates) {
     throw new Error('Unable to retrieve weather information');
   }
 }
-// TODO: Create buildGeocodeQuery method MOVED  HELPER METHODS: 'buildGeocodeQuery' and 'buildWeatherQuery' TO COME BEFORE METHODS USING THEM NJF
-  // private buildGeocodeQuery(): string {}
-private buildGeocodeQuery(city: string): string {
-    const params = new URLSearchParams({
-      q: city,
-      limit: '1',
-      appid: this.apiKey
-    });
-
-    return `${this.baseURL}/geo/1.0/direct?${params}`;
-  }
-  
-private buildWeatherQuery(coordinates: Coordinates): string {
-    const params = new URLSearchParams({
-      lat: coordinates.lat.toString(),
-      lon: coordinates.lon.toString(),
-      units: 'imperial',
-      appid: this.apiKey
-    });
-
-    return `${this.baseURL}/onecall?${params}`;
-  }
 
 private parseCurrentWeather(weatherData: any): Weather {
   const current = weatherData.current;
@@ -158,6 +170,22 @@ private buildForecastArray(currentWeather: Weather, weatherData: any): Weather[]
     humidity: day.humidity
     }));
   }
+
+  async getWeatherForCity(city: string): Promise<Weather[]> {
+    try {
+      this.cityName = city;
+      const coordinates = await this.fetchAndDestructureLocationData(city);
+      const weatherData = await this.fetchWeatherData(coordinates);
+      
+      const currentWeather = this.parseCurrentWeather(weatherData);
+      const forecastWeather = this.buildForecastArray(currentWeather, weatherData);
+      
+        return [currentWeather, ...forecastWeather];
+    } catch (error) {
+        console.error('Error in getWeatherForCity:', error);
+       throw error;
+      }
+    }
 }
 
 export default new WeatherService();

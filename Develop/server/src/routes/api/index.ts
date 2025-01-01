@@ -1,5 +1,4 @@
-import { Router } from 'express';
-require('fs.promises index.js');
+import { Router } from 'express'; 
 const router = Router();
 
 import weatherRoutes from './weatherRoutes.js';
